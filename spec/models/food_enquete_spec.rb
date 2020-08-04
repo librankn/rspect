@@ -47,56 +47,6 @@ RSpec.describe FoodEnquete, type: :model do
     end
   end
 
-  # describe '入力項目の有無' do
-
-  #   # インスタンスを共通化してテストデータを作成
-  #   let(:new_enquete) {FoodEnquete.new}
-
-  #   context '必須入力であること' do
-  #     it 'お名前が必須であること' do
-  #       # new_enquete = FoodEnquete.new
-  #       # バリデーションエラーが発生することを検証
-  #       expect(new_enquete).not_to be_valid
-  #       # 必須入力のメッセージが含まれることを検証
-  #       expect(new_enquete.errors[:name]).to include(I18n.t('errors.messages.blank'))
-  #     end
-
-  #     it 'メールアドレスが必須であること' do
-  #       # new_enquete = FoodEnquete.new
-  #       expect(new_enquete).not_to be_valid
-  #       expect(new_enquete.errors[:mail]).to include(I18n.t('errors.messages.blank'))
-  #     end
-
-  #     it '登録できないこと' do
-  #       # new_enquete = FoodEnquete.new
-  #       # 保存に失敗することを検証
-  #       expect(new_enquete.save).to be_falsey
-  #     end
-  #   end
-
-  #   context '任意入力であること' do
-  #     it 'ご意見・ご要望が任意であること' do
-  #       # new_enquete = FoodEnquete.new
-  #       expect(new_enquete).not_to be_valid
-  #       # 必須入力のメッセージが含まれないことを検証
-  #       expect(new_enquete.errors[:request]).not_to include(I18n.t('errors.messages.blank'))
-  #     end
-  #   end
-  # end
-
-  # describe 'メールアドレスの形式' do
-  #   context '不正な形式のメールアドレスの場合' do
-  #     it 'エラーになること' do
-  #       new_enquete = FoodEnquete.new
-  #       # 不正な形式のメールアドレスを入力
-  #       new_enquete.mail = "taro.tanaka"
-  #       expect(new_enquete).not_to be_valid
-  #       #不正な形式のメールアドレスが含まれることを検証
-  #       expect(new_enquete.errors[:mail]).to include(I18n.t('errors.messages.invalid'))
-  #     end
-  #   end
-  # end
-
   describe 'アンケート回答時の条件' do
     context 'メールアドレスを確認すること' do
 
@@ -105,35 +55,20 @@ RSpec.describe FoodEnquete, type: :model do
         FactoryBot.create(:food_enquete_takana)
       end
 
-      it '同じメールアドレスで再び回答できないこと' do
-        # enquete_tanaka = FoodEnquete.new(
-        #   name: '田中 太郎',
-        #   mail: 'taro.tanaka@example.com',
-        #   age: 25,
-        #   food_id: 2,
-        #   score: 3,
-        #   request: 'おいしかったです。',
-        #   present_id: 1
-        # )
-        # enquete_tanaka.save
-        # FactoryBot.create(:food_enquete_takana)
+      # it '同じメールアドレスで再び回答できないこと' do
+      #   re_enquete_tanaka = FactoryBot.build(:food_enquete_takana, food_id:0, score:1,present_id: 0, request: "スープがぬるかった")
+      #   expect(re_enquete_tanaka).not_to be_valid
 
-        # re_enquete_tanaka = FoodEnquete.new(
-        #   name: '田中 太郎',
-        #   mail: 'taro.tanaka@example.com',
-        #   age: 25,
-        #   food_id: 0,
-        #   score: 1,
-        #   request: 'スープがぬるかった',
-        #   present_id: 0
-        # )
-        re_enquete_tanaka = FactoryBot.build(:food_enquete_takana, food_id:0, score:1,present_id: 0, request: "スープがぬるかった")
-        expect(re_enquete_tanaka).not_to be_valid
-
-        # メールアドレスが既に存在するメッセージが含まれることを検証
-        expect(re_enquete_tanaka.errors[:mail]).to include(I18n.t('errors.messages.taken'))
-        expect(re_enquete_tanaka.save).to be_falsey
-        expect(FoodEnquete.all.size).to eq 1
+      #   # メールアドレスが既に存在するメッセージが含まれることを検証
+      #   expect(re_enquete_tanaka.errors[:mail]).to include(I18n.t('errors.messages.taken'))
+      #   expect(re_enquete_tanaka.save).to be_falsey
+      #   expect(FoodEnquete.all.size).to eq 1
+      # end
+      it '同じメールアドレスで再び回答できること' do
+        re_enquete_tanaka = FactoryBot.build(:food_enquete_takana, food_id: 0, score:1, present_id:0, request:"スープがぬるかった")
+        expect(re_enquete_tanaka).to be_valid
+        expect(re_enquete_tanaka.save).to be_truthy
+        expect(FoodEnquete.all.size).to eq 2
       end
       it '異なるメールアドレスで回答できること' do
         # enquete_tanaka = FoodEnquete.new(
